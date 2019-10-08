@@ -15,7 +15,7 @@ public class JavaFXMain extends Application{
     public void start(Stage stage) {
 		
 		//Get the optimisation here
-		OptimisationTest ot = new OptimisationTest();
+		BOBYQAOptimisationTest ot = new BOBYQAOptimisationTest();
 		double[][] input = ot.getInput();
 		double[][] output = ot.getOutput();
 		
