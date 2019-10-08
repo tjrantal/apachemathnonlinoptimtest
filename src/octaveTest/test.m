@@ -12,7 +12,7 @@ global constants
 initCentre = [50+40*rand(),20+40*rand()];
 rad = 40+30*rand();
 disp(sprintf('X %.1f Y %.1f rad %.1f',initCentre(1),initCentre(2),rad));
-noise = 0;
+noise = 10;
 constants = struct();
 constants.coordinates = getCircle(initCentre,rad,noise);
 figure

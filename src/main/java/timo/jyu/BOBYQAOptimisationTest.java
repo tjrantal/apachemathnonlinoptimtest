@@ -18,13 +18,10 @@ import org.apache.commons.math3.util.Pair;
 import java.util.Arrays;	//Fill in an array with a value
 
 public class BOBYQAOptimisationTest{
-	double radius;
 	double[][] observedPoints;
 	double[][] fittedPoints;
-	double[] initCentre;
 
-	
-	/**The error fucntion class*/
+	/**The error function class*/
 	public class CircleErrorFunction implements MultivariateFunction {
 			/**Implement the MultivariateFunction interface. This is the summed squares error
 				@input x are the parameters that are being optimised
@@ -42,29 +39,11 @@ public class BOBYQAOptimisationTest{
         }
     }	
 	
-	private double[][] getCircle(double[] cent,double rad,double noise){
-		double[][] ret = new double[8][];
-		for (int i = 0; i < ret.length; ++i){
-			ret[i] = new double[]{cent[0]+rad*Math.cos(((double) i)/((double) ret.length)*2d*Math.PI)+Math.random()*noise,
-				cent[1]+rad*Math.sin(((double) i)/((double) ret.length)*2d*Math.PI)+Math.random()*noise};
-		}
-		return ret;
-	}
-
-	
-
-	public BOBYQAOptimisationTest(){
-		// the target is to have all points at the specified radius from the center
-		radius = 40+30*Math.random();
-		initCentre = new double[]{50d+40d*Math.random(),20d+40d*Math.random()};
-		System.out.println(String.format("Init X %.1f Y %.1f rad %.1f",initCentre[0],initCentre[1],radius));
-		
-		observedPoints = getCircle(initCentre,radius,0d);
-
-
+	public BOBYQAOptimisationTest(double[][] observedPoints){
+		this.observedPoints = observedPoints;
 		// least squares problem to solve : modeled radius should be close to target radius
 		double[] initGuess = new double[] { 70d, 40d, 40d };
-		System.out.println(String.format("Init X %.1f Y %.1f rad %.1f",initGuess[0],initGuess[1],initGuess[2]));
+		//System.out.println(String.format("Init X %.1f Y %.1f rad %.1f",initGuess[0],initGuess[1],initGuess[2]));
 		int dim = initGuess.length;
 		int additionalInterpolationPoints = 0;
       int numIterpolationPoints = 2 * dim + 1 + additionalInterpolationPoints;
@@ -77,14 +56,13 @@ public class BOBYQAOptimisationTest{
                            new InitialGuess(initGuess));
 		
 		double[] fit = new double[]{result.getPoint()[0],result.getPoint()[1],result.getPoint()[2]};
-		System.out.println(String.format("Fit X %.1f Y %.1f rad %.1f",fit[0],fit[1],fit[2]));
+		System.out.println(String.format("BOBYQA Fit X %.1f Y %.1f rad %.1f",fit[0],fit[1],fit[2]));
 		System.out.println("RMS: " + result.getValue());
 		//System.out.println("evaluations: "   + optimum.getEvaluations());
 		//System.out.println("iterations: "    + optimum.getIterations());
 		
 		//Create fitted circle points
-		fittedPoints = getCircle(new double[]{fit[0], fit[1]},fit[2],0d);
-		
+		fittedPoints = Utils.getCircle(new double[]{fit[0], fit[1]},fit[2],0d);	
 	}
 	
 	public double[][] getInput(){
@@ -103,14 +81,6 @@ public class BOBYQAOptimisationTest{
 		}
 		return ret;
 	}
-	
-	
-	/**Test the class without JavaFX visualisation*/
-	public static void main(String[] a){	
-		BOBYQAOptimisationTest ot = new BOBYQAOptimisationTest();		
-	}
-	
-	 
-	 
+
 	
 }
